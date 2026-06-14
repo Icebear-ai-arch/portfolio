@@ -14,7 +14,7 @@ const skillGroups = [
   },
   {
     title: "Web Development",
-    items: ["HTML", "CSS", "JavaScript", "Bootstrap", "PHP basics", "Django"],
+    items: ["HTML", "CSS", "JavaScript", "Bootstrap", "PHP", "Django"],
   },
   {
     title: "Database & Tools",
