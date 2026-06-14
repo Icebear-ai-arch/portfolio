@@ -13,6 +13,10 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [currentAnimation, setCurrentAnimation] = useState("idle");
 
+  const serviceId = import.meta.env.VITE_APP_EMAILJS_SERVICE_ID;
+  const templateId = import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY;
+
   const handleChange = ({ target: { name, value } }) => {
     setForm({ ...form, [name]: value });
   };
@@ -22,13 +26,27 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!serviceId || !templateId || !publicKey) {
+      showAlert({
+        show: true,
+        text: "Contact form is not configured yet.",
+        type: "danger",
+      });
+      return;
+    }
+
     setLoading(true);
     setCurrentAnimation("hit");
 
-    emailjs
-      .send(
-        import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("Email request timed out")), 15000);
+    });
+
+    Promise.race([
+      emailjs.send(
+        serviceId,
+        templateId,
         {
           from_name: form.name,
           to_name: "Justfer F. Carabuena",
@@ -36,8 +54,10 @@ const Contact = () => {
           to_email: "cjustfer@gmail.com",
           message: form.message,
         },
-        import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
-      )
+        publicKey
+      ),
+      timeoutPromise,
+    ])
       .then(
         () => {
           setLoading(false);
