@@ -53,10 +53,10 @@ const HomeInfo = ({ currentStage }) => {
         Need a project done or looking for a dev? <br/> I'm just a few keystrokes away
       </p>
 
-      <a href='mailto:cjustfer@gmail.com' className='neo-brutalism-white neo-btn'>
+      <Link to='/contact' className='neo-brutalism-white neo-btn'>
         Let's talk
         <img src={arrow} alt='arrow' className='w-4 h-4 object-contain' />
-      </a>
+      </Link>
     </div>
     );
   }
